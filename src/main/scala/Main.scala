@@ -1,3 +1,4 @@
+import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -7,16 +8,28 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.Select
 
 import collection.JavaConverters._
+import java.util.Properties
 
 object Main extends App {
+
+  // Properties
+  val props = new Properties()
+  val input = new FileInputStream("config.properties")
+  props.load(input)
+
+  // Values
+  val url = props.getProperty("url")
+  val user = props.getProperty("user")
+  val password = props.getProperty("password")
+
   // Start chrome
   val driver: WebDriver = new ChromeDriver()
   driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
-  driver.get("https://na.erp.weightwatchers.com/OA_HTML/AppsLocalLogin.jsp")
+  driver.get(url)
 
   // Put user and password
-  driver.findElement(By.xpath("//input[@id='M__Id']")).sendKeys(System.getenv("USER_NAME_ORACLE"))
-  driver.findElement(By.xpath("//input[@id='M__Ida']")).sendKeys(System.getenv("PASSWORD_ORACLE"))
+  driver.findElement(By.xpath("//input[@id='M__Id']")).sendKeys(user)
+  driver.findElement(By.xpath("//input[@id='M__Ida']")).sendKeys(password)
   driver.findElement(By.xpath("//form[@id='myForm']")).submit()
 
 

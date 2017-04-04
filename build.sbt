@@ -12,4 +12,4 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-support" % "3.3.1"
 )
 
-mainClass in (Compile, run) := Some("com.alvinalexander.Foo")
+mainClass in (Compile, run) := Some("Main")
