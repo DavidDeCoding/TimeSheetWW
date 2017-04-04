@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.Select
 
 import collection.JavaConverters._
 
-object First extends App {
+object Main extends App {
   // Start chrome
   val driver: WebDriver = new ChromeDriver()
   driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
@@ -53,7 +53,7 @@ object First extends App {
 
     driver.findElement(By.id("review_uixr")).click()
 
-    // This will submit it.
+    // This will submit it, uncomment after it works.
 //    driver.findElement(By.id("submit_uixr")).click()
   }
 
