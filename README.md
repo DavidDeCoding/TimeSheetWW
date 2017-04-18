@@ -2,8 +2,13 @@
 To submit the timesheet
 
 To use this, 
-Add USER_NAME_ORACLE as oracle user name
-Add PASSWORD_ORACLE as oracle password
+Add a **config.properties** file in the root of the directory with:
+
+url=<LOGIN_URL>
+
+user=<YOUR_USER>
+
+password=<YOUR_PASSWORD>
 
 Then,
 Remove the commented out submit, *WARNING* test with it commented out first.
