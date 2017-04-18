@@ -69,7 +69,7 @@ object Main extends App {
 
   timeRangeOption match {
     case Some(option) =>
-      driver.findElement(By.id("N32")).sendKeys(option.getText)
+      periodSelect.selectByVisibleText(option.getText)
       driver.findElement(By.id("A241N1display")).sendKeys("WWC2017.007 - Core (2017)")
       driver.findElement(By.id("A251N1display")).sendKeys("30 - Build & QA")
       driver.findElement(By.id("A261N1display")).sendKeys("Labor")
