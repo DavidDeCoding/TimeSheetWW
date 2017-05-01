@@ -61,6 +61,7 @@ object Main extends App {
     periodSelect
       .getOptions
       .asScala
+      .filter(_.getText != "More Periods...")
       .map(toRange)
       .filter(range => range.timeRange.startDate.before(now) && !range.option.getText.contains("~"))
       .sorted
