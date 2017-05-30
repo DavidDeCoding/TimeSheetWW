@@ -15,8 +15,10 @@ project=<YOUR_PROJECT>
 task=<YOUR_TASK>
 
 Get your project + task values from time entry page. For example:
-```project = "WWC2017.007 - Core (2017)"
-task = "30 - Build & QA"```
+```
+project = "WWC2017.007 - Core (2017)"
+task = "30 - Build & QA"
+```
 
 Then,
 Remove the commented out submit, *WARNING* test with it commented out first.
