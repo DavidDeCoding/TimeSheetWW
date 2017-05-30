@@ -33,7 +33,6 @@ object Main extends App {
   val password = props.getProperty("password")
   val project = props.getProperty("project")
   val task = props.getProperty("task")
-  val  = props.getProperty("user")
 
   // Start chrome
   implicit val driver: WebDriver = new ChromeDriver()
