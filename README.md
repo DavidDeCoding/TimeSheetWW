@@ -10,6 +10,10 @@ user=<YOUR_USER>
 
 password=<YOUR_PASSWORD>
 
+project=<YOUR_PROJECT>
+
+task=<YOUR_TASK>
+
 Then,
 Remove the commented out submit, *WARNING* test with it commented out first.
 

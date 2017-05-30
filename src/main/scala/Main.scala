@@ -31,6 +31,9 @@ object Main extends App {
   val url = props.getProperty("url")
   val user = props.getProperty("user")
   val password = props.getProperty("password")
+  val project = props.getProperty("project")
+  val task = props.getProperty("task")
+  val  = props.getProperty("user")
 
   // Start chrome
   implicit val driver: WebDriver = new ChromeDriver()
@@ -73,8 +76,8 @@ object Main extends App {
   timeRangeOption match {
     case Some(option) =>
       periodSelect.selectByVisibleText(option.getText)
-      waitTillDisplayedToSendKeys(By.id("A241N1display"), "WWC2017.007 - Core (2017)")
-      waitTillDisplayedToSendKeys(By.id("A251N1display"), "30 - Build & QA")
+      waitTillDisplayedToSendKeys(By.id("A241N1display"), project)
+      waitTillDisplayedToSendKeys(By.id("A251N1display"), task)
       waitTillDisplayedToSendKeys(By.id("A261N1display"), "Labor")
 
       waitTillDisplayedToSendKeys(By.id("B22_1_1"), "8")
