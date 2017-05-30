@@ -33,13 +33,15 @@ object Main extends App {
   val password = props.getProperty("password")
 
   // Start chrome
-  val driver: WebDriver = new ChromeDriver()
-  driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS)
+  implicit val driver: WebDriver = new ChromeDriver()
+  driver.manage().timeouts().implicitlyWait(500, TimeUnit.SECONDS)
   driver.get(url)
 
+  implicit val timeToWait = 100
+
   // Put user and password
-  driver.findElement(By.xpath("//input[@id='M__Id']")).sendKeys(user)
-  driver.findElement(By.xpath("//input[@id='M__Ida']")).sendKeys(password)
+  waitTillDisplayedToSendKeys(By.xpath("//input[@id='M__Id']"), user)
+  waitTillDisplayedToSendKeys(By.xpath("//input[@id='M__Ida']"), password)
   driver.findElement(By.xpath("//form[@id='myForm']")).submit()
 
 
@@ -71,15 +73,15 @@ object Main extends App {
   timeRangeOption match {
     case Some(option) =>
       periodSelect.selectByVisibleText(option.getText)
-      driver.findElement(By.id("A241N1display")).sendKeys("WWC2017.007 - Core (2017)")
-      driver.findElement(By.id("A251N1display")).sendKeys("30 - Build & QA")
-      driver.findElement(By.id("A261N1display")).sendKeys("Labor")
+      waitTillDisplayedToSendKeys(By.id("A241N1display"), "WWC2017.007 - Core (2017)")
+      waitTillDisplayedToSendKeys(By.id("A251N1display"), "30 - Build & QA")
+      waitTillDisplayedToSendKeys(By.id("A261N1display"), "Labor")
 
-      driver.findElement(By.id("B22_1_1")).sendKeys("8")
-      driver.findElement(By.id("B22_1_2")).sendKeys("8")
-      driver.findElement(By.id("B22_1_3")).sendKeys("8")
-      driver.findElement(By.id("B22_1_4")).sendKeys("8")
-      driver.findElement(By.id("B22_1_5")).sendKeys("8")
+      waitTillDisplayedToSendKeys(By.id("B22_1_1"), "8")
+      waitTillDisplayedToSendKeys(By.id("B22_1_2"), "8")
+      waitTillDisplayedToSendKeys(By.id("B22_1_3"), "8")
+      waitTillDisplayedToSendKeys(By.id("B22_1_4"), "8")
+      waitTillDisplayedToSendKeys(By.id("B22_1_5"), "8")
 
       driver.findElement(By.id("review_uixr")).click()
 
@@ -99,5 +101,25 @@ object Main extends App {
     val timeRange = TimeRange(simpleDateFormat.parse(latestPeriodSelectValueRange(0)), simpleDateFormat.parse(latestPeriodSelectValueRange(1)))
 
     TimeRangeWithOption(timeRange, option)
+  }
+
+  // Wait till the element is displayed.
+  def waitTillDisplayedToSendKeys(
+    by: By,
+    value: String)(implicit
+    driver: WebDriver,
+    timeToWait: Int): Unit = {
+
+    def runTill(no: Int): Boolean =
+      if (no > 0) {
+        if (!driver.findElement(by).isDisplayed) {
+          Thread.sleep(timeToWait)
+          runTill(no - 1)
+        } else true
+      }
+      else false
+
+    if (runTill(3)) driver.findElement(by).sendKeys(value)
+    else println(s"Failed to find $by")
   }
 }
