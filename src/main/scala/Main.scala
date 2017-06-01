@@ -1,6 +1,6 @@
 import java.io.FileInputStream
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.{Calendar, Date, Properties}
 import java.util.concurrent.TimeUnit
 
 import org.openqa.selenium.{By, WebDriver, WebElement}
@@ -8,8 +8,6 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.support.ui.Select
 
 import collection.JavaConverters._
-import java.util.Properties
-
 import Protocols.{TimeRange, TimeRangeWithOption}
 
 object Protocols {
@@ -69,11 +67,10 @@ object Main extends App {
       .map(toRange)
       .filter(range => range.timeRange.startDate.before(now) && !range.option.getText.contains("~"))
       .sorted
-      .map(range => range.option)
       .headOption
 
   timeRangeOption match {
-    case Some(option) =>
+    case Some(TimeRangeWithOption(timeRange, option)) =>
       periodSelect.selectByVisibleText(option.getText)
       waitTillDisplayedToSendKeys(By.id("A241N1display"), project)
       waitTillDisplayedToSendKeys(By.id("A251N1display"), task)
@@ -83,7 +80,10 @@ object Main extends App {
       waitTillDisplayedToSendKeys(By.id("B22_1_2"), "8")
       waitTillDisplayedToSendKeys(By.id("B22_1_3"), "8")
       waitTillDisplayedToSendKeys(By.id("B22_1_4"), "8")
-      waitTillDisplayedToSendKeys(By.id("B22_1_5"), "8")
+
+      // Happy Fridays!!!!
+      if (isWeekOnSummerFriday(timeRange.endDate)) waitTillDisplayedToSendKeys(By.id("B22_1_5"), "4")
+      else waitTillDisplayedToSendKeys(By.id("B22_1_5"), "8")
 
       driver.findElement(By.id("review_uixr")).click()
 
@@ -123,5 +123,20 @@ object Main extends App {
 
     if (runTill(3)) driver.findElement(by).sendKeys(value)
     else println(s"Failed to find $by")
+  }
+
+  // Check for summer fridays
+  def isWeekOnSummerFriday(endDayOfWeek: Date): Boolean = {
+    val calendar = Calendar.getInstance()
+    calendar.setTime(endDayOfWeek)
+    val thisYear = calendar.get(Calendar.YEAR)
+
+    val memorialDay = simpleDateFormat.parse(s"$thisYear/05/29")
+    val laborDay = simpleDateFormat.parse(s"$thisYear/09/04")
+
+    def isBetweenOrEqual(to: Date, from: Date, theDate: Date): Boolean = theDate.equals(to) || theDate.after(to) || theDate.equals(from) || theDate.before(from)
+
+    if (isBetweenOrEqual(memorialDay, laborDay, endDayOfWeek)) true
+    else false
   }
 }
