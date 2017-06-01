@@ -88,14 +88,14 @@ object Main extends App {
       driver.findElement(By.id("review_uixr")).click()
 
     // This will submit it, uncomment after it works.
-//      driver.findElement(By.id("submit_uixr")).click()
+    //      driver.findElement(By.id("submit_uixr")).click()
 
     case None =>
       println("Nothing to submit!")
   }
 
-// This will close the driver.
-//  driver.close()
+  // This will close the driver.
+  //  driver.close()
 
   def toRange(option: WebElement): TimeRangeWithOption = {
     val latestPeriodSelectValue = option.getAttribute("value")
@@ -129,14 +129,18 @@ object Main extends App {
   def isWeekOnSummerFriday(endDayOfWeek: Date): Boolean = {
     val calendar = Calendar.getInstance()
     calendar.setTime(endDayOfWeek)
+
+    // Change endDayOfWeek from Saturday to Friday!
+    calendar.add(Calendar.DAY_OF_MONTH, -1)
     val thisYear = calendar.get(Calendar.YEAR)
+    val dayBefore = new Date(calendar.getTime.getTime)
 
     val memorialDay = simpleDateFormat.parse(s"$thisYear/05/29")
     val laborDay = simpleDateFormat.parse(s"$thisYear/09/04")
 
-    def isBetweenOrEqual(to: Date, from: Date, theDate: Date): Boolean = theDate.equals(to) || theDate.after(to) || theDate.equals(from) || theDate.before(from)
-
-    if (isBetweenOrEqual(memorialDay, laborDay, endDayOfWeek)) true
+    if (isBetweenOrEqual(memorialDay, laborDay, dayBefore)) true
     else false
   }
+
+  def isBetweenOrEqual(to: Date, from: Date, theDate: Date): Boolean = theDate.equals(to) || theDate.after(to) || theDate.equals(from) || theDate.before(from)
 }
