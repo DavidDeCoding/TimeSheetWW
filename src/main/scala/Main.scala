@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.Select
 import collection.JavaConverters._
 import Protocols.{TimeRange, TimeRangeWithOption}
 
+import scala.util.Try
+
 object Protocols {
   case class TimeRange(startDate: Date, endDate: Date)
   case class TimeRangeWithOption(timeRange: TimeRange, option: WebElement) extends Ordered[TimeRangeWithOption] {
@@ -37,7 +39,7 @@ object Main extends App {
   driver.manage().timeouts().implicitlyWait(500, TimeUnit.SECONDS)
   driver.get(url)
 
-  implicit val timeToWait = 100
+  implicit val timeToWait = 1000
 
   // Put user and password
   waitTillDisplayedToSendKeys(By.xpath("//input[@id='M__Id']"), user)
@@ -114,14 +116,15 @@ object Main extends App {
 
     def runTill(no: Int): Boolean =
       if (no > 0) {
-        if (!driver.findElement(by).isDisplayed) {
-          Thread.sleep(timeToWait)
-          runTill(no - 1)
-        } else true
+        try { driver.findElement(by).click(); true }
+        catch {
+          case _: Throwable =>
+            runTill(no - 1)
+        }
       }
       else false
 
-    if (runTill(3)) driver.findElement(by).sendKeys(value)
+    if (runTill(10)) driver.findElement(by).sendKeys(value)
     else println(s"Failed to find $by")
   }
 
